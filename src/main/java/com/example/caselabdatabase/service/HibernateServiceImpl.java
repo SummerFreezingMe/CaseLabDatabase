@@ -1,9 +1,11 @@
 package com.example.caselabdatabase.service;
 
 
-import com.example.caselabdatabase.dao.JdbcRepository;
+import com.example.caselabdatabase.dao.HibernateRepository;
 import com.example.caselabdatabase.entity.User;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,18 +14,18 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-public class JdbcServiceImpl implements UserService {
-    private final JdbcRepository userRepository;
+public class HibernateServiceImpl implements UserService {
+    private final HibernateRepository userRepository;
 
-    public JdbcServiceImpl(JdbcRepository userRepository) {
+    public HibernateServiceImpl(HibernateRepository userRepository) {
         this.userRepository = userRepository;
     }
 
 
     @Override
     public void deleteUser(String login, boolean preserve) {
-        userRepository.deleteById(userRepository
-                .findByUsername(login).getId());
+        userRepository.delete(userRepository
+                .findByUsername(login));
     }
 
 
@@ -35,7 +37,7 @@ public class JdbcServiceImpl implements UserService {
 
     @Override
     public Optional<User> findOne(Long id) {
-        return Optional.ofNullable(userRepository.findById(id));
+        return userRepository.findById(id);
     }
 
 
@@ -68,12 +70,12 @@ public class JdbcServiceImpl implements UserService {
 
     @Override
     public Page<User> findAllPaged(Integer pageLength) {
-        return null;
+        return userRepository.findAll(Pageable.ofSize(pageLength));
     }
 
     @Override
     public List<User> findAllSorted() {
-        return null;
+        return userRepository.findAll(Sort.by("username").ascending());
     }
 
 }

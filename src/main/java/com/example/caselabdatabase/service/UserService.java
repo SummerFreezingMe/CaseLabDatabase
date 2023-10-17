@@ -1,6 +1,7 @@
 package com.example.caselabdatabase.service;
 
 import com.example.caselabdatabase.entity.User;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,4 +17,8 @@ public interface UserService {
     User save(User user);
 
     User updateUser(User userDTO);
+
+    Page<User> findAllPaged(Integer pageLength);
+
+    List<User> findAllSorted();
 }
